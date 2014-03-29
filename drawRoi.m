@@ -3,4 +3,5 @@ function [mask]=drawRoi(videoFile)
     im = read(video,1);
     h_im = imshow(im);
     mask = createMask(imfreehand,h_im);
+    mask = imfill(mask,'holes');
 end

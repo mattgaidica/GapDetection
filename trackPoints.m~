@@ -11,15 +11,19 @@ function [allPoints]=trackPoints(videoFile,mask)
     maskRegion = imGray(region(2):(region(2)+region(4)),region(1):(region(1)+region(3)));
     maskRegion = inpaint_nans(maskRegion); %blurred
     imGray(region(2):(region(2)+region(4)),region(1):(region(1)+region(3))) = maskRegion(:,:);
-    imGray(isnan(imGray)) = 0;
+    
+    %imGray(region(2):(region(2)+region(4)),region(1):(region(1)+region(3)))=NaN;
+    %imRegion = imGray
     
 %     threeChMask = repmat(mask, [1, 1, 3]);
 %     im(~threeChMask) = 0;
+
+    
     %im = insertShape(im, 'Rectangle', region,'Color', 'red'); %reference
  
-    points = detectMinEigenFeatures(imGray,'ROI',region);
+    points = detectMinEigenFeatures(rgb2gray(im),'ROI',region);
     tracker = vision.PointTracker('MaxBidirectionalError',inf,'BlockSize',[11 11]);
-    initialize(tracker,points.Location,im);
+    initialize(tracker,points.Location,im); %im must be rgb
 
     allPoints = zeros(size(points,1),2,video.NumberOfFrames);
     for i=1:video.NumberOfFrames
