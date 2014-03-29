@@ -1,12 +1,7 @@
-function [centroids]=findEars(videoFile,coords,mask)
-%idx = sub2ind(size(A), row, col)
-%[r, c] = ind2sub(size(A), idx)
-
+function [mask]=earMask(videoFile,ROI)
     video = VideoReader(videoFile);
     detector = vision.ForegroundDetector('NumTrainingFrames', 30,'InitialVariance', 10*10);
-    centroids = NaN(video.NumberOfFrames,2);
-
-%     allMasks = zeros(video.Height,video.Width);
+    allMasks = zeros(video.Height,video.Width);
 
     for i=30:100%video.NumberOfFrames
         disp(i)
@@ -15,26 +10,22 @@ function [centroids]=findEars(videoFile,coords,mask)
 
         hsvIm = rgb2hsv(im);
         v = hsvIm(:,:,3);
-        %v(v < .2) = 0;
+        %v(v < .2) = 0; %if you wanted to bound brightness
         v(~mask>0) = 0;
         
         finalMask = foregroundMask&v;
         %finalMask = bwdist(finalMask) < 2;
         finalMask = imopen(finalMask,strel('disk',3));
         finalMask = imclose(finalMask,strel('disk',3));
-        finalMask = imfill(finalMask,'holes');
+               finalMask = imfill(finalMask,'holes');
         imshow(finalMask);
         
-%         if(i==1)
-%             allMasks=finalMask;
-%         else
-%             allMasks = imfill(allMasks,'holes');
-%             allMasks=allMasks|finalMask;
-%         end
-%         red = im(:,:,1);     
-%         red(allMasks > 0) = 1;
-%         im(:,:,1) = red;
-%         
+        if(i==1)
+            allMasks=finalMask;
+        else
+            allMasks = imfill(allMasks,'holes');
+            allMasks=allMasks|finalMask;
+        end
 
         %imshow(im);
         
