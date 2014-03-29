@@ -9,7 +9,7 @@ function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,l
     open(newVideo);
 
     samplePoints = 5;
-    for i=60:100%video.NumberOfFrames
+    for i=1:video.NumberOfFrames
         disp(i)
         im = read(video,i);
         meanLeft = mean(leftAllPoints(leftMaxIndexes(1:samplePoints),:,i));

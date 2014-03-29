@@ -1,6 +1,6 @@
-function [allMasks]=earMask(videoFile,ROI)
+function [allMasks]=earMask(videoFile,Roi)
     video = VideoReader(videoFile);
-    detector = vision.ForegroundDetector('NumTrainingFrames', 30,'InitialVariance', 10*10);
+    detector = vision.ForegroundDetector('NumTrainingFrames',30,'InitialVariance',10*10);
     allMasks = zeros(video.Height,video.Width);
 
     for i=30:110%video.NumberOfFrames
@@ -11,7 +11,7 @@ function [allMasks]=earMask(videoFile,ROI)
         hsvIm = rgb2hsv(im);
         v = hsvIm(:,:,3);
         %v(v < .2) = 0; %if you wanted to bound brightness
-        v(~ROI>0) = 0;
+        v(~Roi>0) = 0;
         
         iterativeMask = foregroundMask&v;
         iterativeMask = bwdist(iterativeMask) < 3;
