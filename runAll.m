@@ -17,10 +17,10 @@ function runAll(videoFile,leftRoi,rightRoi)
     leftAllPoints=trackPoints(videoFile,leftMask);
     rightAllPoints=trackPoints(videoFile,rightMask);
     
-    [leftPointDist,leftDiffVects,leftDiffRanges,leftMaxIndexes]=pointCompute(leftAllPoints);
-    [rightPointDist,rightDiffVects,rightDiffRanges,rightMaxIndexes]=pointCompute(rightAllPoints);
+    [leftIndexes,leftPointsDist,leftPointsPhase,leftDiffDistances,leftDiffRanges]=pointCompute(leftAllPoints);
+    [rightIndexes,rightPointsDist,rightPointsPhase,rightDiffDistances,rightDiffRanges]=pointCompute(rightAllPoints);
     
-    displayEars(videoFile,leftMaxIndexes,leftAllPoints,rightMaxIndexes,rightAllPoints);
+    displayEars(videoFile,leftIndexes,leftAllPoints,rightIndexes,rightAllPoints);
     
     [~,name,~] = fileparts(videoFile);
     save([name '_' datestr(now,'ddmmyyyy_HHMM')]);
