@@ -33,8 +33,7 @@ function [maxIndexes,allPointsDist,allPointsPhase,diffDistances,diffRanges]=poin
     figure;
     hold on;
     for i=1:size(allPointsDist,1) %points rows 
-       diffDistance = diff(allPointsDist(i,:)); %change in distance
-       diffDistances(i,:) = diffDistance(1,:);
+       diffDistances(i,:) = diff(allPointsDist(i,:)); %change in distance
        %plot(diffDistance);
        plot(allPointsDist(i,:))
     end
@@ -62,10 +61,10 @@ function [maxIndexes,allPointsDist,allPointsPhase,diffDistances,diffRanges]=poin
     hold on;
     for i=1:size(allPointsPhase,1) %points rows 
        maxDiffPhases(i,:) = max(abs(diff(allPointsPhase(i,:))));
-       plot(allPointsPhase(i,:)); % plot this...
-       %plot(diff(allPointsPhase(i,:))); % or this, not together
+       %plot(allPointsPhase(i,:)); % plot this...
+       plot(diff(allPointsPhase(i,:))); % or this, not together
     end
-    plot(1:size(allPointsPhase,2),avgPhase,'*','Color','green'); %along with this...
+    %plot(1:size(allPointsPhase,2),avgPhase,'*','Color','green'); %along with this...
     hold off;
 
     % if thresholds or points are too aggressive, this will error out 
@@ -74,12 +73,12 @@ function [maxIndexes,allPointsDist,allPointsPhase,diffDistances,diffRanges]=poin
     % threshold for large abberations
     maxIndexes = maxIndexes(diffValue < 15);
     % remove large phase changes, value from observation
-    thresholdDiffPhasesIndexes = find(maxDiffPhases<.012);
+    thresholdDiffPhasesIndexes = find(maxDiffPhases<.01);
     maxIndexes = maxIndexes(ismember(maxIndexes,thresholdDiffPhasesIndexes));
     %remove anything that has a disimilar angle, value from observation.
     %This should not be too aggressive, if points lie above/below the angle
     %of interest they will get caught. Mainly to make sure the point is not
     %traveling sideways or backwards
-    thresholdPhasesIndexes = find(abs(avgPhase-mean(allPointsPhase,2))<.2);
+    thresholdPhasesIndexes = find(abs(avgPhase-mean(allPointsPhase,2))<.05);
     maxIndexes = maxIndexes(ismember(maxIndexes,thresholdPhasesIndexes)); %remove phase abberations
 end

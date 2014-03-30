@@ -12,23 +12,27 @@ function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,l
     newVideo.Quality = 100;
     newVideo.FrameRate = 20;
     open(newVideo);
+    
+    meanLeft = zeros(video.NumberOfFrames,2);
+    meanRight = zeros(video.NumberOfFrames,2);
 
-    %there is still no checking on whether or not 3 indexes even exist: if
-    %all points were crap, this will error out right now
-    samplePoints = 3;
+    % now that most variables undergo thresholding, we can plot all the
+    % indexes that appear at this stage
     for i=1:video.NumberOfFrames
         disp(['Writing video...' num2str(i)])
         im = read(video,i);
-        meanLeft = mean(leftAllPoints(leftMaxIndexes(1:samplePoints),:,i));
-        im = insertShape(im,'Circle',[meanLeft 4],'Color','green');
-        meanRight = mean(rightAllPoints(rightMaxIndexes(1:samplePoints),:,i));
-        im = insertShape(im,'Circle',[meanRight 4],'Color','green');
-        for j=1:samplePoints; %how many points to plot
+        meanLeft(i,:) = mean(leftAllPoints(leftMaxIndexes,:,i));
+        im = insertShape(im,'Circle',[meanLeft(i,:) 4],'Color','green');
+        meanRight(i,:) = mean(rightAllPoints(rightMaxIndexes,:,i));
+        im = insertShape(im,'Circle',[meanRight(i,:) 4],'Color','green');
+        for j=1:size(leftMaxIndexes,1) %how many points to plot
             im = insertShape(im,'FilledCircle',[leftAllPoints(leftMaxIndexes(j),:,i) 2]);
+        end
+        for j=1:size(rightMaxIndexes,1) %how many points to plot
             im = insertShape(im,'FilledCircle',[rightAllPoints(rightMaxIndexes(j),:,i) 2]);
         end
         writeVideo(newVideo,im);
-        %imshow(im)
+        imshow(im)
     end
     close(newVideo);
 end
