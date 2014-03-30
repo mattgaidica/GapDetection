@@ -10,7 +10,7 @@ function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,l
 
     samplePoints = 5;
     for i=1:video.NumberOfFrames
-        disp(i)
+        disp(['Writing video...' num2str(i)])
         im = read(video,i);
         meanLeft = mean(leftAllPoints(leftMaxIndexes(1:samplePoints),:,i));
         im = insertShape(im,'Circle',[meanLeft 4],'Color','green');

@@ -4,7 +4,7 @@ function [allMasks]=earMask(videoFile,Roi)
     allMasks = zeros(video.Height,video.Width);
 
     for i=30:110%video.NumberOfFrames
-        disp(i)
+        disp(['Creating mask from foreground...' num2str(i)])
         im = read(video,i);
         foregroundMask = step(detector,im);
 
@@ -14,7 +14,7 @@ function [allMasks]=earMask(videoFile,Roi)
         v(~Roi>0) = 0;
         
         iterativeMask = foregroundMask&v;
-        iterativeMask = bwdist(iterativeMask) < 3;
+        iterativeMask = bwdist(iterativeMask) < 4;
         iterativeMask = imopen(iterativeMask,strel('disk',3));
         iterativeMask = imclose(iterativeMask,strel('disk',3));
         iterativeMask = imfill(iterativeMask,'holes');

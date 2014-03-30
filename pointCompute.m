@@ -1,4 +1,5 @@
 function [allPointsDist,diffVects,diffRanges,maxIndexes]=pointCompute(allPoints)
+    disp('Computing points...')
     allPointsDist = zeros(size(allPoints,1),size(allPoints,3)-1);
     for i=1:size(allPointsDist,1) %rows of points
        for j=1:size(allPointsDist,2) %frames
@@ -8,6 +9,7 @@ function [allPointsDist,diffVects,diffRanges,maxIndexes]=pointCompute(allPoints)
     end
 
     diffVects = zeros(size(allPointsDist,1),size(allPointsDist,2)-1);
+    figure;
     hold on;
     for i=1:size(allPointsDist,1) %points rows 
        diffVect = diff(allPointsDist(i,:)); %change  in distance
