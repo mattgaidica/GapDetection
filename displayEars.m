@@ -1,3 +1,8 @@
+% Draws points onto a video. Most importantly, it is not until this final
+% step that the amount of points ('samples') is chosen to represent the
+% centroid of the ear. This takes the most active (based on deflection)
+% points and averages them together to represent the final ear data point.
+
 function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,leftAllPoints,rightMaxIndexes,rightAllPoints)
     video = VideoReader(videoFile);
     

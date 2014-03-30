@@ -1,7 +1,14 @@
+% Adds a tracking object to the masked-ROI's that have been created.
+% Because the Eigen features use a square region, this finds the largest
+% region within the masked-ROI and uses that. If you don't do this, you
+% will get features points on the edges of the ears and the grating of the
+% cage.
+
 function [allPoints]=trackPoints(videoFile,mask)
     video = VideoReader(videoFile);
     im = read(video,1);
     
+    % http://www.mathworks.com/matlabcentral/fileexchange/28155-inscribedrectangle/content/html/Inscribed_Rectangle_demo.html
     [C,H,W] = FindLargestRectangles(mask,[0 0 1]);
     [~,pos] = max(C(:));
     [r,c] = ind2sub(size(C),pos);
@@ -10,6 +17,11 @@ function [allPoints]=trackPoints(videoFile,mask)
 %     im = insertShape(im,'Rectangle', region,'Color', 'red'); %reference
  
     points = detectMinEigenFeatures(rgb2gray(im),'ROI',region);
+    % could definintly use something other than inf but you would either
+    % need a dynamic structure to hold the valid points, or fill them in
+    % with something (this option uses the validity flags, which would be
+    % nice). Currently, the software just thresholds the points later on,
+    % so nothing too extreme registers as a useable point.
     tracker = vision.PointTracker('MaxBidirectionalError',inf,'BlockSize',[15 15]);
     initialize(tracker,points.Location,im);
 
@@ -18,12 +30,7 @@ function [allPoints]=trackPoints(videoFile,mask)
         disp(['Tracking points...' num2str(i)])
         im = read(video,i);
         [points,validity] = step(tracker,im);
-%         badIndexes = find(validity==0);
-%         for j=1:size(badIndexes)
-%            points(badIndexes(j),:) = NaN(1,2); 
-%         end
-      
-        allPoints(:,:,i) = points(validity,:);
+        allPoints(:,:,i) = points(validity,:); %points always valid right now
 %         im=insertMarker(im,points(validity,:),'+');
 %         imshow(im);
     end

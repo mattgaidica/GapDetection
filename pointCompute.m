@@ -1,9 +1,16 @@
+% Runs some computation on the points. Gets the distances between each
+% point frame-by-frame, then computes the difference or delta of each point
+% distance between frames (large spikes in this show when a significant
+% even occurs).
+
 function [allPointsDist,diffVects,diffRanges,maxIndexes]=pointCompute(allPoints)
     disp('Computing points...')
+    
+    % could possibly use the 'distmat' library
     allPointsDist = zeros(size(allPoints,1),size(allPoints,3)-1);
     for i=1:size(allPointsDist,1) %rows of points
        for j=1:size(allPointsDist,2) %frames
-           %euclidean dist from one frame to the next
+           % euclidean dist from one frame to the next
            allPointsDist(i,j) = pdist([allPoints(i,1,j) allPoints(i,2,j);allPoints(i,1,j+1) allPoints(i,2,j+1)]);
        end
     end
@@ -19,6 +26,8 @@ function [allPointsDist,diffVects,diffRanges,maxIndexes]=pointCompute(allPoints)
     end
     hold off;
 
+    % it will be important to only use the points that actually deflect (or
+    % change), so they need to be ordered into a list of max deflection
     diffRanges = zeros(size(diffVects,1),1);
     for i=1:size(diffVects,1) %diffVect points
         diffRanges(i,1) = range(diffVects(i,:));
