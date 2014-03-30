@@ -17,21 +17,22 @@ function [allPoints]=trackPoints(videoFile,mask)
 %     im = insertShape(im,'Rectangle', region,'Color', 'red'); %reference
  
     points = detectMinEigenFeatures(rgb2gray(im),'ROI',region);
-    % could definintly use something other than inf but you would either
-    % need a dynamic structure to hold the valid points, or fill them in
-    % with something (this option uses the validity flags, which would be
-    % nice). Currently, the software just thresholds the points later on,
-    % so nothing too extreme registers as a useable point.
+    % Anything other than inf for the 'MaxBidirectionalError' requires you
+    % to handle validity flags since the matrix is of a predefined size
     tracker = vision.PointTracker('MaxBidirectionalError',inf,'BlockSize',[15 15]);
     initialize(tracker,points.Location,im);
 
     allPoints = zeros(size(points,1),2,video.NumberOfFrames);
+    iteratedValidity = ones(size(points));
     for i=1:video.NumberOfFrames
         disp(['Tracking points...' num2str(i)])
         im = read(video,i);
         [points,validity] = step(tracker,im);
-        allPoints(:,:,i) = points(validity,:); %points always valid right now
-%         im=insertMarker(im,points(validity,:),'+');
-%         imshow(im);
+        iteratedValidity = iteratedValidity&validity;
+        allPoints(:,:,i) = points;
+        im=insertMarker(im,points(validity,:),'+');
+        imshow(im);
     end
+    % prune everything that was ever invalid
+    allPoints = allPoints(iteratedValidity,:,:);
 end

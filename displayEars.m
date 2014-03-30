@@ -13,7 +13,7 @@ function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,l
     newVideo.FrameRate = 20;
     open(newVideo);
 
-    samplePoints = 5;
+    samplePoints = 3;
     for i=1:video.NumberOfFrames
         disp(['Writing video...' num2str(i)])
         im = read(video,i);
