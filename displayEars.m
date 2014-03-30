@@ -13,6 +13,8 @@ function [meanLeft,meanRight,saveVideoAs]=displayEars(videoFile,leftMaxIndexes,l
     newVideo.FrameRate = 20;
     open(newVideo);
 
+    %there is still no checking on whether or not 3 indexes even exist: if
+    %all points were crap, this will error out right now
     samplePoints = 3;
     for i=1:video.NumberOfFrames
         disp(['Writing video...' num2str(i)])
