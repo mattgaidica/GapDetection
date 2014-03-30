@@ -23,7 +23,7 @@ function runAll(videoFile,leftRoi,rightRoi)
     displayEars(videoFile,leftIndexes,leftAllPoints,rightIndexes,rightAllPoints);
     
     [~,name,~] = fileparts(videoFile);
-    save([name '_' datestr(now,'ddmmyyyy_HHMM')]);
+    save(['sessions/' name '_' datestr(now,'ddmmyyyy_HHMM')]);
     
     disp('Done.')
 end

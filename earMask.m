@@ -9,7 +9,7 @@ function [allMasks]=earMask(videoFile,Roi)
     % bounding the frames where movement occurs makes this a bit more
     % accurate and speeds things up, optional (ex. 1:video.NumberOfFrames)
     for i=30:110
-        disp(['Creating mask from foreground...' num2str(i)])
+        disp(['Creating mask from foreground... ' num2str(i)])
         im = read(video,i);
         foregroundMask = step(detector,im);
 
@@ -22,9 +22,9 @@ function [allMasks]=earMask(videoFile,Roi)
         
         % these are just cleaning up the image, turning specs into blobs
         iterativeMask = foregroundMask&v;
-        iterativeMask = bwdist(iterativeMask) < 4;
-        iterativeMask = imopen(iterativeMask,strel('disk',3));
-        iterativeMask = imclose(iterativeMask,strel('disk',3));
+        iterativeMask = bwdist(iterativeMask) < 2;
+        iterativeMask = imopen(iterativeMask,strel('disk',2));
+        iterativeMask = imclose(iterativeMask,strel('disk',2));
         iterativeMask = imfill(iterativeMask,'holes');
         
         if(i==1)
@@ -33,5 +33,6 @@ function [allMasks]=earMask(videoFile,Roi)
             allMasks = imfill(allMasks,'holes');
             allMasks = allMasks|iterativeMask;
         end
+        imshow(allMasks);
     end
 end
