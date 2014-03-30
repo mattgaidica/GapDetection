@@ -1,5 +1,3 @@
-runAll('the_video.avi');
+`runAll('the_video.avi',[],[]);` or `runAll('the_video.avi',leftMask,rightMask);`
 
 * Make sure to add the Inscribed_Rectangle folder to Paths on Matlab
-
-* Deflection with fixed point appears to work, but some points deflect sideways, perhaps there is a way to eliminate this type of 'noise'
