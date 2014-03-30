@@ -1,1 +1,0 @@
-runAll('the_video.avi');
