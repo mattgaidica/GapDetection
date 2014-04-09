@@ -72,13 +72,14 @@ function [maxIndexes,allPointsDist,allPointsPhase,diffDistances,diffRanges]=poin
     [diffValue,maxIndexes]=sort(diffRanges,'descend'); 
     % threshold for large abberations
     maxIndexes = maxIndexes(diffValue < 15);
+    maxIndexes = maxIndexes(diffValue>.5);
     % remove large phase changes, value from observation
-    thresholdDiffPhasesIndexes = find(maxDiffPhases<.01);
+    thresholdDiffPhasesIndexes = find(maxDiffPhases<.03);
     maxIndexes = maxIndexes(ismember(maxIndexes,thresholdDiffPhasesIndexes));
     %remove anything that has a disimilar angle, value from observation.
     %This should not be too aggressive, if points lie above/below the angle
     %of interest they will get caught. Mainly to make sure the point is not
     %traveling sideways or backwards
-    thresholdPhasesIndexes = find(abs(avgPhase-mean(allPointsPhase,2))<.05);
+    thresholdPhasesIndexes = find(abs(avgPhase-mean(allPointsPhase,2))<.25);
     maxIndexes = maxIndexes(ismember(maxIndexes,thresholdPhasesIndexes)); %remove phase abberations
 end

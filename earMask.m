@@ -33,6 +33,6 @@ function [allMasks]=earMask(videoFile,Roi)
             allMasks = imfill(allMasks,'holes');
             allMasks = allMasks|iterativeMask;
         end
-        imshow(allMasks);
+        %imshow(allMasks);
     end
 end
